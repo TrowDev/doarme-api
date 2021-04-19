@@ -1,7 +1,8 @@
-package br.com.doeme.doeme.fornecedor.v1;
+package br.com.doeme.doeme.doador.v1;
 
-import br.com.doeme.doeme.fornecedor.model.entity.Fornecedor;
-import br.com.doeme.doeme.fornecedor.model.service.FornecedorService;
+import br.com.doeme.doeme.doador.model.entity.Doador;
+import br.com.doeme.doeme.doador.model.service.DoadorService;
+import br.com.doeme.doeme.exceptions.ResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,38 +14,38 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/fornecedoress")
-public class FornecedorResources {
+@RequestMapping("/v1/doadores")
+public class DoadoresResources {
 
     @Autowired
-    private FornecedorService fornecedorService;
+    private DoadorService doadorService;
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<Fornecedor>> list() {
-        List<Fornecedor> fornecedorList = fornecedorService.list();
+    public ResponseEntity<List<Doador>> list() {
+        List<Doador> pessoaList = doadorService.list();
 
-        if (fornecedorList.isEmpty())
+        if (pessoaList.isEmpty())
             return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(fornecedorList);
+        return ResponseEntity.ok(pessoaList);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Fornecedor> finById(@PathVariable("id") Long id) {
-        Optional<Fornecedor> fornecedores = fornecedorService.findById(id);
+    public ResponseEntity<Doador> finById(@PathVariable("id") Long id) {
+        Optional<Doador> pessoa = doadorService.findById(id);
 
-        if (!fornecedores.isPresent())
+        if (!pessoa.isPresent())
             return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(fornecedores.get());
+        return ResponseEntity.ok(pessoa.get());
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Fornecedor> save(@Valid @RequestBody Fornecedor fornecedor) throws Exception {
-        Fornecedor saved = fornecedorService.save(fornecedor);
+    public ResponseEntity<Doador> save(@Valid @RequestBody Doador pessoa) throws ResourceFoundException {
+        Doador saved = doadorService.save(pessoa);
 
         if (saved == null)
             return ResponseEntity.noContent().build();
@@ -55,8 +56,8 @@ public class FornecedorResources {
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Fornecedor> update(@PathVariable("id") Long id, @Valid @RequestBody Fornecedor fornecedor) {
-        Fornecedor updated = fornecedorService.update(id, fornecedor);
+    public ResponseEntity<Doador> update(@PathVariable("id") Long id, @Valid @RequestBody Doador pessoa) {
+        Doador updated = doadorService.update(id, pessoa);
 
         if (updated == null)
             return ResponseEntity.noContent().build();
@@ -66,7 +67,7 @@ public class FornecedorResources {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> detele(@PathVariable("id") Long id) {
-        fornecedorService.delete(id);
+        doadorService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
